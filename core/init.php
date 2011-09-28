@@ -12,3 +12,15 @@ class Core {
         return self::$_di;
     }
 }
+
+Core::DI()['router'] = Core::DI()->share(function ($c) {
+    Loader::add('vendor.moor.Moor');
+    $ref  = new ReflectionClass(Moor);
+    $self = $ref->newInstanceWithoutConstructor() ;
+
+    return $self;
+});
+
+Loader::add('routing');
+$router = Core::DI()['router'];
+$router::run();

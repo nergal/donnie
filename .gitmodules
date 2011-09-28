@@ -1,0 +1,6 @@
+[submodule "core/vendor/moor"]
+	path = core/vendor/moor
+	url = https://github.com/jeffturcotte/moor.git
+[submodule "core/vendor/twig"]
+	path = core/vendor/twig
+	url = https://github.com/fabpot/Twig.git
