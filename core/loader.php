@@ -29,6 +29,10 @@ class Loader {
 
 
     public static function __autoload($class_name) {
+        if (class_exists($class_name) OR interface_exists($class_name)) {
+            return FALSE;
+        }
+
         $includes = [
             APPLICATION_PATH,
             MODULES_PATH,
@@ -38,18 +42,12 @@ class Loader {
             CORE_PATH.'vendor'.DIRECTORY_SEPARATOR,
         ];
 
-        $file_name = str_replace('_', DIRECTORY_SEPARATOR, $class_name).'.php';
+        $file_name = str_replace('_', DIRECTORY_SEPARATOR, strtolower($class_name)).'.php';
         foreach ($includes as $path) {
             if ($full_path = realpath($path.$file_name) AND is_readable($full_path)) {
-                if ($strict === TRUE) {
-                    require_once $full_path;
-                } else {
-                    include_once $full_path;
-                }
+                require_once $full_path;
                 return TRUE;
             }
         }
-
-        throw new Exception('Unable to autoload class '.$class_name);
     }
 }
