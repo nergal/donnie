@@ -6,9 +6,6 @@ class Template {
 
     public function __construct($filename = NULL) {
         $this->_filename = $filename;
-
-        Loader::add('vendor.twig.lib.Twig.Autoloader');
-        Twig_Autoloader::register();
     }
 
     public function __get($var) {
@@ -36,9 +33,11 @@ class Template {
             throw new Exception('No template filename added');
         }
 
-        $loader = new Twig_Loader_Filesystem(APPLICATION_PATH.'templates');
-        $twig = new Twig_Environment($loader);
+        ob_start();
+        extract($this->_variables);
+        include_once APPLICATION_PATH.'templates/'.$this->_filename;
+        $html = ob_get_clean();
 
-        echo $twig->render($this->_filename, $this->_variables);
+        echo $html;
     }
 }

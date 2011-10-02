@@ -45,6 +45,10 @@ $handler = function(Exception $exception) {
 
     $trace = $exception->getTrace();
     foreach ($trace as $key => $stackPoint) {
+        if ( ! array_key_exists('args', $trace[$key])) {
+            $trace[$key]['args'] = [];
+        }
+
         $trace[$key]['args'] = array_map(function($item) {
             $name = gettype($item);
 
@@ -111,6 +115,8 @@ set_exception_handler($handler);
 register_shutdown_function(function() use ($handler) {
     $error = error_get_last();
     if ($error !== NULL) {
+        ob_end_clean();
+
         $exception = new ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']);
         $handler($exception);
     }

@@ -6,7 +6,7 @@ trait View {
 
     public function __set($variable, $value) {
         if ($variable == 'view') {
-            $this->_view = new Template($value);
+            $this->_view = new Template_PHP($value);
             $this->view = $this->_view;
             return TRUE;
         }
